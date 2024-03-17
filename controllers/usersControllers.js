@@ -38,12 +38,13 @@ const login = async (req, res) => {
   }
 
   const { _id: id } = user;
-  console.log(user);
   const payload = {
     id,
   };
 
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
+  await usersServices.updateUser({ _id: id }, { token });
+
   res.json({
     token,
     user: {
@@ -53,7 +54,25 @@ const login = async (req, res) => {
   });
 };
 
+const getCurrent = async (req, res) => {
+  const { email, subscription } = req.user;
+
+  res.json({
+    email,
+    subscription,
+  });
+};
+
+const logout = async (req, res) => {
+  const { _id } = req.user;
+  await usersServices.updateUser({ _id }, { token: "" });
+
+  res.status(204).json();
+};
+
 export default {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
+  getCurrent: ctrlWrapper(getCurrent),
+  logout: ctrlWrapper(logout),
 };

@@ -1,11 +1,12 @@
 import Contact from "../models/Contacts.js";
 
-export const listContacts = () => Contact.find({}, "-createdAt -updatedAt");
+export const listContacts = (filter = {}, query = {}) =>
+  Contact.find(filter, "-owner -createdAt -updatedAt", query);
 
 export const addContact = (data) => Contact.create(data);
 
 export const getContactById = (id) =>
-  Contact.findById(id, "-createdAt -updatedAt");
+  Contact.findById(id, "-owner -createdAt -updatedAt");
 
 export const removeContact = (id) =>
   Contact.findByIdAndDelete(id, { projection: "-createdAt -updatedAt" });

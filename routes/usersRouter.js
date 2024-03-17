@@ -5,6 +5,7 @@ import {
   userRegisterSchema,
   userLoginSchema,
 } from "../schemas/usersSchemas.js";
+import userValidator from "../middlewares/usersValidator.js";
 
 const usersRouter = express.Router();
 
@@ -19,5 +20,9 @@ usersRouter.post(
   validateBody(userLoginSchema),
   usersControllers.login
 );
+
+usersRouter.get("/current", userValidator, usersControllers.getCurrent);
+
+usersRouter.post("/logout", userValidator, usersControllers.logout);
 
 export default usersRouter;
