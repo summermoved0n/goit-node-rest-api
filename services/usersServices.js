@@ -13,3 +13,6 @@ export const validatePassword = async (password, hashPassword) =>
   bcrypt.compare(password, hashPassword);
 
 export const updateUser = (filter, data) => User.findOneAndUpdate(filter, data);
+
+export const updateSubscription = (id, data) =>
+  User.findOneAndUpdate(id, data, { select: "email subscription" });

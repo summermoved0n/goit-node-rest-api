@@ -4,11 +4,25 @@ import { ctrlWrapper } from "../helpers/ctrlWrapper.js";
 
 const getAllContacts = async (req, res) => {
   const { _id: owner } = req.user;
-  const { page = 1, limit = 10 } = req.query;
+  const { page = 1, limit = 20, favorite } = req.query;
   const skip = (page - 1) * limit;
-  const result = await contactsService.listContacts({ owner }, { skip, limit });
+  if (favorite) {
+    const result = await contactsService.listContacts(
+      { owner, favorite: true },
+      { skip, limit }
+    );
 
-  res.json(result);
+    return res.json(result);
+  }
+
+  if (!favorite) {
+    const result = await contactsService.listContacts(
+      { owner },
+      { skip, limit }
+    );
+
+    return res.json(result);
+  }
 };
 
 const getOneContact = async (req, res) => {

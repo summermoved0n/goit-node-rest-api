@@ -4,6 +4,7 @@ import validateBody from "../helpers/validateBody.js";
 import {
   userRegisterSchema,
   userLoginSchema,
+  userSubscriptionSchema,
 } from "../schemas/usersSchemas.js";
 import userValidator from "../middlewares/usersValidator.js";
 
@@ -24,5 +25,12 @@ usersRouter.post(
 usersRouter.get("/current", userValidator, usersControllers.getCurrent);
 
 usersRouter.post("/logout", userValidator, usersControllers.logout);
+
+usersRouter.patch(
+  "/",
+  userValidator,
+  validateBody(userSubscriptionSchema),
+  usersControllers.updateSubscription
+);
 
 export default usersRouter;
