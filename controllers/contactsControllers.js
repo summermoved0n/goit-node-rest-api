@@ -3,9 +3,26 @@ import HttpError from "../helpers/HttpError.js";
 import { ctrlWrapper } from "../helpers/ctrlWrapper.js";
 
 const getAllContacts = async (req, res) => {
-  const result = await contactsService.listContacts();
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 20, favorite } = req.query;
+  const skip = (page - 1) * limit;
+  if (favorite) {
+    const result = await contactsService.listContacts(
+      { owner, favorite: true },
+      { skip, limit }
+    );
 
-  res.json(result);
+    return res.json(result);
+  }
+
+  if (!favorite) {
+    const result = await contactsService.listContacts(
+      { owner },
+      { skip, limit }
+    );
+
+    return res.json(result);
+  }
 };
 
 const getOneContact = async (req, res) => {
@@ -29,7 +46,8 @@ const deleteContact = async (req, res) => {
 };
 
 const createContact = async (req, res) => {
-  const result = await contactsService.addContact(req.body);
+  const { _id: owner } = req.user;
+  const result = await contactsService.addContact({ ...req.body, owner });
 
   res.status(201).json(result);
 };
