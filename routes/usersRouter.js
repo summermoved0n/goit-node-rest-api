@@ -39,7 +39,7 @@ usersRouter.patch(
   "/avatars",
   userValidator,
   // validateBody(userChangeAvatar),
-  upload.single("avatarURL"),
+  // upload.single("avatarURL"),
   usersControllers.updateAvatar
 );
 

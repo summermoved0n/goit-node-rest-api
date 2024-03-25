@@ -81,7 +81,7 @@ const updateSubscription = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
-  console.log(req.body);
+  console.log(req.user);
 };
 
 export default {
