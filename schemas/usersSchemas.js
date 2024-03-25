@@ -15,6 +15,6 @@ export const userSubscriptionSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business").required(),
 });
 
-// export const userChangeAvatar = Joi.object({
-//   avatarURL: Joi.binary(),
-// });
+export const userChangeAvatar = Joi.object({
+  avatarURL: Joi.binary(),
+});

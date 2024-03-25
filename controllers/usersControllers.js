@@ -1,9 +1,14 @@
 import jwt from "jsonwebtoken";
+import fs from "fs/promises";
+import path from "path";
 import gravatar from "gravatar";
+import Jimp from "jimp";
 import "dotenv/config.js";
 import * as usersServices from "../services/usersServices.js";
 import HttpError from "../helpers/HttpError.js";
 import { ctrlWrapper } from "../helpers/ctrlWrapper.js";
+
+const avatarsPath = path.resolve("public", "avatars");
 
 const { JWT_SECRET } = process.env;
 
@@ -81,7 +86,27 @@ const updateSubscription = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
-  console.log(req.user);
+  const { _id: id } = req.user;
+  const { path: oldPath, filename } = req.file;
+
+  console.log(filename);
+
+  Jimp.read(filename)
+    .then((avatar) => {
+      return avatar.resize(250, 250).quality(60).greyscale().write(filename);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+
+  const newPath = path.join(avatarsPath, filename);
+  await fs.rename(oldPath, newPath);
+  const newAvatar = path.join("public", "avatars", filename);
+  const result = await usersServices.updateAvatars(id, {
+    avatarURL: newAvatar,
+  });
+
+  res.json(result);
 };
 
 export default {

@@ -5,7 +5,7 @@ import {
   userRegisterSchema,
   userLoginSchema,
   userSubscriptionSchema,
-  // userChangeAvatar,
+  userChangeAvatar,
 } from "../schemas/usersSchemas.js";
 import userValidator from "../middlewares/usersValidator.js";
 import upload from "../middlewares/upload.js";
@@ -38,8 +38,8 @@ usersRouter.patch(
 usersRouter.patch(
   "/avatars",
   userValidator,
-  // validateBody(userChangeAvatar),
-  // upload.single("avatarURL"),
+  validateBody(userChangeAvatar),
+  upload.single("avatarURL"),
   usersControllers.updateAvatar
 );
 
