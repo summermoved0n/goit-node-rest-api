@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import gravatar from "gravatar";
 import "dotenv/config.js";
 import * as usersServices from "../services/usersServices.js";
 import HttpError from "../helpers/HttpError.js";
@@ -13,7 +14,9 @@ const register = async (req, res) => {
     throw HttpError(409, "Email in use");
   }
 
-  const newUser = await usersServices.register(req.body);
+  const avatar = gravatar.url(email);
+  const newUser = await usersServices.register(req.body, avatar);
+  console.log(newUser);
 
   res.status(201).json({
     user: {
@@ -77,10 +80,15 @@ const updateSubscription = async (req, res) => {
   res.json(result);
 };
 
+const updateAvatar = async (req, res) => {
+  console.log(req.body);
+};
+
 export default {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
   updateSubscription: ctrlWrapper(updateSubscription),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };

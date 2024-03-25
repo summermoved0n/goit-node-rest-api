@@ -4,9 +4,9 @@ import User from "../models/Users.js";
 
 export const findUser = (filter) => User.findOne(filter);
 
-export const register = async (data) => {
+export const register = async (data, avatar) => {
   const hashPassword = await bcrypt.hash(data.password, 10);
-  return User.create({ ...data, password: hashPassword });
+  return User.create({ ...data, avatarURL: avatar, password: hashPassword });
 };
 
 export const validatePassword = async (password, hashPassword) =>
