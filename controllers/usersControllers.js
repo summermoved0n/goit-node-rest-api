@@ -88,20 +88,19 @@ const updateSubscription = async (req, res) => {
 const updateAvatar = async (req, res) => {
   const { _id: id } = req.user;
   const { path: oldPath, filename } = req.file;
-
   console.log(filename);
+  const newPath = path.join(avatarsPath, filename);
+  await fs.rename(oldPath, newPath);
+  const newAvatar = path.join("public", "avatars", filename);
 
-  Jimp.read(filename)
+  Jimp.read(newAvatar)
     .then((avatar) => {
-      return avatar.resize(250, 250).quality(60).greyscale().write(filename);
+      return avatar.resize(250, 250).write(newAvatar);
     })
     .catch((err) => {
       console.error(err);
     });
 
-  const newPath = path.join(avatarsPath, filename);
-  await fs.rename(oldPath, newPath);
-  const newAvatar = path.join("public", "avatars", filename);
   const result = await usersServices.updateAvatars(id, {
     avatarURL: newAvatar,
   });
