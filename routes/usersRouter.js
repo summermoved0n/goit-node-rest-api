@@ -5,8 +5,10 @@ import {
   userRegisterSchema,
   userLoginSchema,
   userSubscriptionSchema,
+  userChangeAvatar,
 } from "../schemas/usersSchemas.js";
 import userValidator from "../middlewares/usersValidator.js";
+import upload from "../middlewares/upload.js";
 
 const usersRouter = express.Router();
 
@@ -31,6 +33,14 @@ usersRouter.patch(
   userValidator,
   validateBody(userSubscriptionSchema),
   usersControllers.updateSubscription
+);
+
+usersRouter.patch(
+  "/avatars",
+  userValidator,
+  validateBody(userChangeAvatar),
+  upload.single("avatarURL"),
+  usersControllers.updateAvatar
 );
 
 export default usersRouter;
