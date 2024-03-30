@@ -18,3 +18,7 @@ export const userSubscriptionSchema = Joi.object({
 export const userChangeAvatar = Joi.object({
   avatarURL: Joi.binary(),
 });
+
+export const usersResendEmail = Joi.object({
+  email: Joi.string().required(),
+});
