@@ -6,6 +6,7 @@ import {
   userLoginSchema,
   userSubscriptionSchema,
   userChangeAvatar,
+  usersResendEmail,
 } from "../schemas/usersSchemas.js";
 import userValidator from "../middlewares/usersValidator.js";
 import upload from "../middlewares/upload.js";
@@ -42,5 +43,13 @@ usersRouter.patch(
   upload.single("avatarURL"),
   usersControllers.updateAvatar
 );
+
+usersRouter.post(
+  "/verify",
+  validateBody(usersResendEmail),
+  usersControllers.resendEmail
+);
+
+usersRouter.get("/verify/:verificationToken", usersControllers.verify);
 
 export default usersRouter;
